@@ -1,6 +1,7 @@
 # 🦅 PriceLock — Autonomous Cross-Retailer Price-Drop Sniper, Dark-Pattern Surgeon & PayPal Hold Studio
 
 > **Built for the [PayPal AI Hackathon 2026](https://paypalaihackathon.devpost.com/)** by **ZeroBleed Systems** (`MIT License`).
+> **Live Public Demo:** **[http://66.135.18.157:4690](http://66.135.18.157:4690)** *(HTTPS alias: [https://pricelock.66.135.18.157.sslip.io](https://pricelock.66.135.18.157.sslip.io))*
 > Meaningfully integrates **PayPal Sandbox REST v2 (`Orders AUTHORIZE / CAPTURE / VOID` + `Refunds` + `MCP Server`)**, **Google Gemini 3.5 Flash (`Vertex AI`)**, **AG Studio 3.0 (`ag-studio@3.0.0` + 3 Custom Widgets + Studio Agent Framework)**, **Channel3 (`100M+` SKU Price Graph)**, **APIMatic Context Plugin (`PayPal Server SDK v2`)**, and **Bryntum Hold & Return-Window Timeline**.
 
 ![PriceLock 120-Run Empirical Benchmark](public/benchmark-chart.svg)
@@ -32,8 +33,8 @@ When you (or your AI shopping assistant) buy headphones, an espresso machine, or
 **Prerequisites:** Node.js 20.9+ and npm.
 
 ```bash
-git clone https://github.com/romanfjose/paypal-pricelock-ai.git
-cd paypal-pricelock-ai
+git clone https://github.com/romanfjose/PayPalPriceLock.git
+cd PayPalPriceLock
 npm install
 cp .env.example .env.local   # Optional: add PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, CHANNEL3_API_KEY
 npm run dev                  # Starts on http://localhost:4690
