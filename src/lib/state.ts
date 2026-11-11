@@ -465,7 +465,10 @@ function buildInitialStore(): GlobalStore {
 }
 
 export function getStore(): GlobalStore {
-  if (!globalForPriceLock.__priceLockStore) {
+  if (
+    !globalForPriceLock.__priceLockStore ||
+    globalForPriceLock.__priceLockStore.receipts[0]?.publicKeyHex !== PUBLIC_KEY_HEX
+  ) {
     globalForPriceLock.__priceLockStore = buildInitialStore();
   }
   return globalForPriceLock.__priceLockStore;

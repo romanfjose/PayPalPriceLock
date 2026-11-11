@@ -3,13 +3,16 @@ import type { CryptographicReceipt } from "./types";
 
 // Deterministic Ed25519 keypair derived from seed so receipts verify identically across restarts & in-browser
 const SEED = crypto.createHash("sha256").update("ZeroBleed-PriceLock-PayPal-2026-Ed25519-Seed").digest();
-
-const keyPair = crypto.generateKeyPairSync("ed25519", {
-  privateKeyEncoding: { format: "pem", type: "pkcs8" },
-  publicKeyEncoding: { format: "pem", type: "spki" },
+// PKCS#8 DER prefix for a 32-byte Ed25519 private key seed (RFC 8410)
+const ED25519_PKCS8_PREFIX = Buffer.from("302e020100300506032b657004220420", "hex");
+const privateKeyObj = crypto.createPrivateKey({
+  key: Buffer.concat([ED25519_PKCS8_PREFIX, SEED]),
+  format: "der",
+  type: "pkcs8",
 });
+const publicKeyObj = crypto.createPublicKey(privateKeyObj);
 
-const PUBLIC_KEY_DER = crypto.createPublicKey(keyPair.publicKey).export({ format: "der", type: "spki" });
+const PUBLIC_KEY_DER = publicKeyObj.export({ format: "der", type: "spki" });
 // Last 32 bytes of SPKI DER are the raw Ed25519 public key bytes
 export const PUBLIC_KEY_HEX = PUBLIC_KEY_DER.subarray(PUBLIC_KEY_DER.length - 32).toString("hex");
 
@@ -53,7 +56,7 @@ export function createSignedReceipt(input: {
 }): CryptographicReceipt {
   const canonical = canonicalReceiptPayload(input);
   const payloadHash = crypto.createHash("sha256").update(canonical).digest("hex");
-  const signature = crypto.sign(null, Buffer.from(payloadHash, "utf8"), keyPair.privateKey).toString("hex");
+  const signature = crypto.sign(null, Buffer.from(payloadHash, "utf8"), privateKeyObj).toString("hex");
   return {
     ...input,
     amountUsd: Number(input.amountUsd.toFixed(2)),
@@ -98,7 +101,7 @@ export function verifyReceiptChain(receipts: CryptographicReceipt[]): {
       const sigOk = crypto.verify(
         null,
         Buffer.from(r.payloadHash, "utf8"),
-        keyPair.publicKey,
+        publicKeyObj,
         Buffer.from(r.signatureEd25519, "hex")
       );
       if (!sigOk) {
