@@ -1,21 +1,6 @@
-import fs from "node:fs";
-
 function resolveVertexApiKey(): string | null {
   if (process.env.GOOGLE_API_KEY && process.env.GOOGLE_API_KEY.trim().length > 10) {
     return process.env.GOOGLE_API_KEY.trim();
-  }
-  try {
-    const geminiEnv = "C:/Users/joser/.gemini/.env";
-    if (fs.existsSync(geminiEnv)) {
-      const lines = fs.readFileSync(geminiEnv, "utf8").split(/\r?\n/);
-      for (const line of lines) {
-        if (line.startsWith("GOOGLE_API_KEY=")) {
-          return line.slice("GOOGLE_API_KEY=".length).trim();
-        }
-      }
-    }
-  } catch {
-    // ignore
   }
   return null;
 }
