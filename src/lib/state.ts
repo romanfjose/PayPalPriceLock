@@ -465,9 +465,11 @@ function buildInitialStore(): GlobalStore {
 }
 
 export function getStore(): GlobalStore {
+  const expectedMode = hasLivePayPalCredentials() ? "LIVE_SANDBOX" : "DETERMINISTIC_SANDBOX";
   if (
     !globalForPriceLock.__priceLockStore ||
-    globalForPriceLock.__priceLockStore.receipts[0]?.publicKeyHex !== PUBLIC_KEY_HEX
+    globalForPriceLock.__priceLockStore.receipts[0]?.publicKeyHex !== PUBLIC_KEY_HEX ||
+    globalForPriceLock.__priceLockStore.deals[0]?.paypal.mode !== expectedMode
   ) {
     globalForPriceLock.__priceLockStore = buildInitialStore();
   }
