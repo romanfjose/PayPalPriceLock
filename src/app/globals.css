@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root,
+html[data-theme="warm"] {
+  --pl-canvas: #F4EFE6;
+  --pl-surface: #FBF8F3;
+  --pl-ink: #1F1A16;
+  --pl-muted: #6E6257;
+  --pl-border: #DFD6C9;
+  --pl-accent: #0D7A5F;
+  --pl-font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html[data-theme="dark"] {
+  --pl-canvas: #0E0C14;
+  --pl-surface: #171421;
+  --pl-ink: #F3EFEA;
+  --pl-muted: #A39B93;
+  --pl-border: #2D273B;
+  --pl-accent: #10B981;
+}
+
+body {
+  background-color: var(--pl-canvas);
+  color: var(--pl-ink);
+  font-family: var(--pl-font-sans);
+  margin: 0;
+  padding: 0;
+}
