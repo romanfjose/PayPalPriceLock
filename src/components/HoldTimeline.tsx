@@ -27,42 +27,44 @@ export default function HoldTimeline({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* 2-Second Plain-English Summary Strip */}
-      <div className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-4 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-0.5 text-xs font-bold text-amber-800 dark:text-amber-300">
-              ⏱ Bryntum-Architecture Hold & Return-Window Scheduler
+      <div className="pl-card rounded-2xl p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="max-w-3xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--pl-paypal-soft)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[var(--pl-paypal)]">
+              PayPal Hold &amp; 14-Day Return-Window Scheduler
             </span>
-            <p className="mt-1.5 text-sm font-medium">
-              <strong>WHAT HAPPENED:</strong> Every PayPal <code>AUTHORIZE</code> hold is scheduled as a time-bounded dependency chain: <strong>Hold Window (Days 1–7)</strong> → <strong>Channel3 Price-Drop Trigger</strong> → <strong>14-Day Price-Match & Return Shield</strong>. If a hold expires without hitting your target price, PriceLock auto-voids it (<code>$0.00</code> charged).
+            <p className="mt-1.5 text-xs leading-relaxed text-[var(--pl-muted)]">
+              Every PayPal <code>AUTHORIZE</code> hold runs as a time-bounded dependency chain:{" "}
+              <strong className="text-[var(--pl-ink-secondary)]">Hold Window (Days 1–7)</strong> →{" "}
+              <strong className="text-[var(--pl-ink-secondary)]">Channel3 Price-Drop Trigger</strong> →{" "}
+              <strong className="text-[var(--pl-ink-secondary)]">14-Day Post-Capture Price Shield</strong>. Unmatched holds auto-void at expiry (`$0.00` charged).
             </p>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs font-semibold">
-            <span className="rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-1.5 text-emerald-800 dark:text-emerald-300">
-              {deals.filter((d) => d.status === "AUTHORIZED_HOLD").length} Active Holds Scheduled
+          <div className="flex flex-wrap gap-2 font-mono text-xs font-bold">
+            <span className="rounded-lg bg-[var(--pl-accent-soft)] px-3 py-1.5 text-emerald-800 dark:text-emerald-300">
+              {deals.filter((d) => d.status === "AUTHORIZED_HOLD").length} Active Holds
             </span>
-            <span className="rounded-lg border border-purple-600/30 bg-purple-600/10 px-3 py-1.5 text-purple-800 dark:text-purple-300">
-              100% Auto-Void Protection
+            <span className="rounded-lg border border-[var(--pl-border)] bg-[var(--pl-surface-muted)] px-3 py-1.5">
+              100% Auto-Void Guard
             </span>
           </div>
         </div>
       </div>
 
-      {/* Interactive Gantt / Scheduler Grid */}
-      <div className="pl-glass-panel overflow-hidden rounded-2xl border border-[var(--pl-border)] shadow-sm">
-        <div className="grid grid-cols-12 border-b border-[var(--pl-border)] bg-black/[0.03] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--pl-muted)] dark:bg-white/[0.03]">
-          <div className="col-span-4">PayPal Resource & SKU</div>
+      {/* Interactive Timeline Grid */}
+      <div className="pl-card overflow-hidden rounded-2xl">
+        <div className="grid grid-cols-12 border-b border-[var(--pl-border)] bg-[var(--pl-surface-muted)] px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-[var(--pl-muted)]">
+          <div className="col-span-4">PayPal Order &amp; Product</div>
           <div className="col-span-6">
             <div className="flex justify-between">
-              <span>Nov 6</span>
-              <span>Nov 10</span>
-              <span className="text-emerald-700 dark:text-emerald-400">Today (Nov 11)</span>
-              <span>Nov 16 (Hold Expiry)</span>
-              <span>Nov 24 (Return Cutoff)</span>
+              <span>Day 1</span>
+              <span>Day 4</span>
+              <span className="text-emerald-700 dark:text-emerald-400">Today</span>
+              <span>Hold Expiry</span>
+              <span>14d Return Cutoff</span>
             </div>
           </div>
-          <div className="col-span-2 text-right">Agent Schedule Action</div>
+          <div className="col-span-2 text-right">Schedule Controls</div>
         </div>
 
         <div className="divide-y divide-[var(--pl-border)]">
@@ -76,50 +78,40 @@ export default function HoldTimeline({
               <div
                 key={d.id}
                 onClick={() => setSelectedDealId(d.id)}
-                className={`grid cursor-pointer grid-cols-12 items-center gap-3 px-4 py-3.5 transition ${
-                  isSelected ? "bg-emerald-600/[0.06]" : "hover:bg-black/[0.02] dark:hover:bg-white/[0.02]"
+                className={`grid cursor-pointer grid-cols-12 items-center gap-3 px-5 py-3.5 transition ${
+                  isSelected ? "bg-[var(--pl-paypal-soft)]/50" : "hover:bg-[var(--pl-surface-muted)]"
                 }`}
               >
                 <div className="col-span-4 pr-2">
                   <div className="flex items-center gap-2">
-                    <span className="rounded bg-black/10 px-1.5 py-0.5 font-mono text-[10px] font-bold dark:bg-white/10">
+                    <span className="rounded bg-[var(--pl-surface-muted)] px-1.5 py-0.5 font-mono text-[10px] font-bold text-[var(--pl-muted)]">
                       {d.paypal.orderId.slice(0, 10)}
                     </span>
                     <span className="truncate text-xs font-bold">{d.title}</span>
                   </div>
-                  <div className="mt-1 flex items-center gap-2 text-[11px] text-[var(--pl-muted)]">
-                    <span>Floor: <strong>${effectivePrice.toFixed(2)}</strong></span>
+                  <div className="mt-1 flex items-center gap-2 font-mono text-[11px] text-[var(--pl-muted)]">
+                    <span>Floor ${effectivePrice.toFixed(2)}</span>
                     <span>•</span>
-                    <span className="text-emerald-700 dark:text-emerald-400">
-                      Saved ${(d.totalSavedUsd + dropAmt).toFixed(2)}
+                    <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+                      +${(d.totalSavedUsd + dropAmt).toFixed(2)} saved
                     </span>
-                    {d.splitCrew && (
-                      <span className="rounded bg-purple-600/15 px-1.5 py-0.5 text-[10px] font-semibold text-purple-700 dark:text-purple-300">
-                        4-Way Crew Split
-                      </span>
-                    )}
                   </div>
                 </div>
 
                 {/* Timeline Track */}
-                <div className="col-span-6 relative h-11 rounded-lg border border-[var(--pl-border)] bg-black/[0.02] p-1.5 dark:bg-white/[0.02]">
-                  {/* Today Vertical Marker */}
-                  <div className="absolute top-0 bottom-0 left-[44%] w-0.5 bg-emerald-600/60" />
-
-                  <div className="flex h-full items-center gap-1">
-                    {/* Bar 1: Hold Authorization */}
+                <div className="relative col-span-6 h-10 rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface-muted)] p-1.5">
+                  <div className="absolute top-0 bottom-0 left-[44%] w-0.5 bg-emerald-500/70" />
+                  <div className="flex h-full items-center gap-1.5">
                     <div
-                      className={`flex h-7 items-center justify-between rounded px-2 text-[10px] font-bold text-white shadow-xs transition-all ${
+                      className={`flex h-6 items-center justify-between rounded-md px-2 font-mono text-[10px] font-bold text-white transition-all ${
                         d.status === "AUTHORIZED_HOLD"
-                          ? "bg-amber-600"
+                          ? "bg-[#0070E0]"
                           : d.status === "CAPTURED_AT_TARGET"
-                          ? "bg-emerald-700"
-                          : d.status === "VOIDED_EXPIRED"
-                          ? "bg-zinc-500"
-                          : "bg-teal-700"
+                          ? "bg-emerald-600"
+                          : "bg-slate-500"
                       }`}
                       style={{
-                        marginLeft: `${(idx * 5) % 18}%`,
+                        marginLeft: `${(idx * 5) % 16}%`,
                         width: `${Math.min(52, 34 + extraDays * 3)}%`,
                       }}
                     >
@@ -128,18 +120,12 @@ export default function HoldTimeline({
                           ? `HOLD $${effectivePrice.toFixed(0)} (${7 + extraDays}d)`
                           : d.status === "CAPTURED_AT_TARGET"
                           ? `CAPTURED $${effectivePrice.toFixed(0)}`
-                          : d.status === "VOIDED_EXPIRED"
-                          ? "VOIDED ($0)"
-                          : `REFUNDED -$${d.strippedDarkPatternUsd}`}
+                          : "SETTLED"}
                       </span>
-                      <span>→</span>
                     </div>
 
-                    {/* Dependency Connector + Bar 2: Return & Price-Protection Window */}
-                    <div className="flex h-6 flex-1 items-center rounded border border-dashed border-emerald-600/50 bg-emerald-600/10 px-2 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300">
-                      <span className="truncate">
-                        Channel3 Return & Price-Drop Shield (14d)
-                      </span>
+                    <div className="flex h-6 flex-1 items-center rounded-md border border-dashed border-emerald-500/50 bg-[var(--pl-accent-soft)] px-2 text-[10px] font-semibold text-emerald-800 dark:text-emerald-300">
+                      <span className="truncate">14d Channel3 Price-Drop Shield</span>
                     </div>
                   </div>
                 </div>
@@ -149,17 +135,15 @@ export default function HoldTimeline({
                   <button
                     type="button"
                     onClick={() => simulatePriceTick(d)}
-                    title="Simulate Channel3 detecting a $15 price drop"
-                    className="rounded border border-[var(--pl-border)] px-2 py-1 text-[11px] font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                    className="cursor-pointer rounded-lg border border-[var(--pl-border)] bg-[var(--pl-surface)] px-2 py-1 font-mono text-[11px] font-semibold hover:border-[var(--pl-border-strong)]"
                   >
-                    📉 -$15 Drop
+                    -$15 Drop
                   </button>
                   <button
                     id={`btn-shift-hold-${d.id}`}
                     type="button"
                     onClick={() => extendHoldWindow(d.id)}
-                    title="Extend PayPal Hold Window by +3 days"
-                    className="cursor-pointer rounded-lg border border-[var(--pl-border)] px-2.5 py-1 text-[11px] font-bold transition-all hover:-translate-y-0.5 hover:bg-black/5 dark:hover:bg-white/5"
+                    className="cursor-pointer rounded-lg border border-[var(--pl-border)] bg-[var(--pl-surface)] px-2 py-1 font-mono text-[11px] font-bold hover:border-[var(--pl-border-strong)]"
                   >
                     +3d
                   </button>
@@ -167,7 +151,7 @@ export default function HoldTimeline({
                     <button
                       type="button"
                       onClick={() => onDecision(d.id, "CAPTURE")}
-                      className="rounded bg-emerald-700 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-emerald-800"
+                      className="cursor-pointer rounded-lg bg-[#0070E0] px-2.5 py-1 text-[11px] font-bold text-white hover:bg-[#005EA6]"
                     >
                       Capture
                     </button>
@@ -178,71 +162,6 @@ export default function HoldTimeline({
           })}
         </div>
       </div>
-
-      {/* Selected Deal Dependency Inspector & Multiparty Crew Split */}
-      {selectedDeal && (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-4">
-            <h3 className="text-sm font-bold">
-              Price Trajectory & Hold Dependency: {selectedDeal.title}
-            </h3>
-            <p className="mt-1 text-xs text-[var(--pl-muted)]">
-              PayPal Order <code>{selectedDeal.paypal.orderId}</code> • Expires{" "}
-              <code>{selectedDeal.paypal.expiresAt.slice(0, 10)}</code>
-            </p>
-            <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
-              {selectedDeal.priceHistory.map((pt) => (
-                <div
-                  key={pt.dayLabel}
-                  className="rounded-lg border border-[var(--pl-border)] bg-black/[0.02] p-2 dark:bg-white/[0.02]"
-                >
-                  <div className="text-[11px] font-semibold text-[var(--pl-muted)]">{pt.dayLabel}</div>
-                  <div className="mt-1 text-xs line-through opacity-60">${pt.firstStoreCheckout.toFixed(0)}</div>
-                  <div className="text-sm font-bold text-emerald-700 dark:text-emerald-400">
-                    ${pt.channel3Lowest.toFixed(0)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-4">
-            <h3 className="text-sm font-bold">
-              {selectedDeal.splitCrew
-                ? "Multiparty Group Split-Hold Crew (Zero Fronting)"
-                : "Automated Hold Expiration & Return-Window Rules"}
-            </h3>
-            {selectedDeal.splitCrew ? (
-              <div className="mt-2.5 grid grid-cols-2 gap-2 text-xs">
-                {selectedDeal.splitCrew.map((m) => (
-                  <div
-                    key={m.handle}
-                    className="flex items-center justify-between rounded-lg border border-[var(--pl-border)] p-2"
-                  >
-                    <div>
-                      <div className="font-bold">{m.name}</div>
-                      <div className="font-mono text-[10px] text-[var(--pl-muted)]">{m.paypalAuthId}</div>
-                    </div>
-                    <span className="rounded bg-emerald-600/15 px-2 py-0.5 font-bold text-emerald-800 dark:text-emerald-300">
-                      ${m.shareAmount.toFixed(2)} {m.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <ul className="mt-2.5 space-y-1.5 text-xs text-[var(--pl-muted)]">
-                <li>
-                  • <strong>Gate 1 (Pre-Capture):</strong> PayPal holds ${selectedDeal.channel3VerifiedPrice.toFixed(2)} via <code>Orders v2 AUTHORIZE</code>. Zero funds leave buyer wallet until Channel3 confirms stock & price.
-                </li>
-                <li>
-                  • <strong>Gate 2 (Post-Capture 14d Shield):</strong> If Channel3 spots a lower price before{" "}
-                  <code>{selectedDeal.paypal.returnWindowEndsAt.slice(0, 10)}</code>, PriceLock triggers a partial diff refund via <code>POST /v2/payments/captures/&#123;id&#125;/refund</code>.
-                </li>
-              </ul>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

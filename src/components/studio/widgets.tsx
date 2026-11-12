@@ -92,10 +92,10 @@ function SavingsSankeyWidget(props: AgWidgetParams) {
     <div className="flex h-full flex-col justify-between gap-2 p-2 text-xs">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--pl-border)] pb-2">
         <div className="flex items-center gap-2">
-          <span className="rounded bg-emerald-600/15 px-2 py-0.5 font-semibold text-emerald-700 dark:text-emerald-300">
-            Save Rate: {totalNaive > 0 ? ((totalSaved / totalNaive) * 100).toFixed(1) : "0"}%
+          <span className="rounded-md bg-[var(--pl-accent-soft)] px-2 py-0.5 font-mono font-bold text-emerald-700 dark:text-emerald-300">
+            Save Rate {totalNaive > 0 ? ((totalSaved / totalNaive) * 100).toFixed(1) : "0"}%
           </span>
-          <span className="text-[var(--pl-muted)]">Click any category chip to cross-filter AG Studio:</span>
+          <span className="text-[var(--pl-muted)]">Filter by category:</span>
         </div>
         <div className="flex flex-wrap gap-1">
           {Array.from(new Set(deals.map((d) => d.category))).map((cat) => (
@@ -103,10 +103,10 @@ function SavingsSankeyWidget(props: AgWidgetParams) {
               key={cat}
               type="button"
               onClick={() => handleCategoryFilter(cat)}
-              className={`rounded-full px-2 py-0.5 text-[11px] font-medium transition ${
+              className={`cursor-pointer rounded-md px-2 py-0.5 text-[11px] font-semibold transition ${
                 selectedCategory === cat
-                  ? "bg-emerald-700 text-white"
-                  : "bg-black/5 hover:bg-black/10 dark:bg-white/10"
+                  ? "bg-[#0070E0] text-white"
+                  : "border border-[var(--pl-border)] bg-[var(--pl-surface-muted)] hover:border-[var(--pl-border-strong)]"
               }`}
             >
               {cat}
@@ -116,51 +116,53 @@ function SavingsSankeyWidget(props: AgWidgetParams) {
       </div>
 
       <div className="grid grid-cols-3 items-center gap-3 py-1">
-        <div className="rounded-lg border border-[var(--pl-border)] bg-black/[0.02] p-2.5 dark:bg-white/[0.02]">
-          <div className="text-[11px] uppercase tracking-wider text-[var(--pl-muted)]">1. First Store Checkout</div>
-          <div className="mt-1 text-lg font-bold">${totalNaive.toFixed(2)}</div>
-          <div className="mt-1 text-[11px] text-amber-700 dark:text-amber-300">
-            Includes ${totalTraps.toFixed(2)} in hidden traps
+        <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface-muted)] p-3">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--pl-muted)]">
+            1. Unprotected Cart
+          </div>
+          <div className="mt-1 font-mono text-lg font-extrabold">${totalNaive.toFixed(2)}</div>
+          <div className="mt-1 text-[11px] text-red-600 dark:text-red-400">
+            Includes ${totalTraps.toFixed(2)} in traps
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <div className="rounded-md border border-emerald-600/30 bg-emerald-600/10 p-2">
-            <div className="flex items-center justify-between font-semibold text-emerald-800 dark:text-emerald-300">
-              <span>✂️ Dark Patterns Stripped</span>
-              <span>-${totalTraps.toFixed(2)}</span>
+          <div className="rounded-lg border border-red-500/25 bg-[var(--pl-danger-soft)] p-2">
+            <div className="flex items-center justify-between font-semibold text-red-700 dark:text-red-300">
+              <span>Traps Stripped</span>
+              <span className="font-mono">-${totalTraps.toFixed(2)}</span>
             </div>
-            <div className="mt-1 h-1.5 w-full overflow-hidden rounded bg-emerald-950/20">
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded bg-black/10">
               <div
-                className="h-full bg-emerald-600"
+                className="h-full bg-red-500"
                 style={{ width: `${Math.min(100, (totalTraps / Math.max(1, totalSaved)) * 100)}%` }}
               />
             </div>
           </div>
 
-          <div className="rounded-md border border-teal-600/30 bg-teal-600/10 p-2">
-            <div className="flex items-center justify-between font-semibold text-teal-800 dark:text-teal-300">
-              <span>⚡ Channel3 Arbitrage</span>
-              <span>-${totalArbitrage.toFixed(2)}</span>
+          <div className="rounded-lg border border-[#0070E0]/25 bg-[var(--pl-paypal-soft)] p-2">
+            <div className="flex items-center justify-between font-semibold text-[var(--pl-paypal)]">
+              <span>Channel3 Arbitrage</span>
+              <span className="font-mono">-${totalArbitrage.toFixed(2)}</span>
             </div>
-            <div className="mt-1 h-1.5 w-full overflow-hidden rounded bg-teal-950/20">
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded bg-black/10">
               <div
-                className="h-full bg-teal-600"
+                className="h-full bg-[#0070E0]"
                 style={{ width: `${Math.min(100, (totalArbitrage / Math.max(1, totalSaved)) * 100)}%` }}
               />
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg border border-emerald-600/40 bg-emerald-600/10 p-2.5">
-          <div className="text-[11px] uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
-            3. PayPal Verified Hold Floor
+        <div className="rounded-xl border border-emerald-500/30 bg-[var(--pl-accent-soft)] p-3">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+            3. PayPal Verified Hold
           </div>
-          <div className="mt-1 text-lg font-bold text-emerald-900 dark:text-emerald-200">
+          <div className="mt-1 font-mono text-lg font-extrabold text-emerald-900 dark:text-emerald-200">
             ${totalLocked.toFixed(2)}
           </div>
-          <div className="mt-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
-            ✓ ${totalSaved.toFixed(2)} kept in your wallet
+          <div className="mt-1 font-mono text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+            +${totalSaved.toFixed(2)} kept
           </div>
         </div>
       </div>
@@ -187,21 +189,21 @@ function DarkPatternsWallWidget(props: AgWidgetParams) {
               // ignore
             }
           }}
-          className="cursor-pointer rounded-lg border border-[var(--pl-border)] bg-black/[0.02] p-2.5 transition hover:border-emerald-600/50 dark:bg-white/[0.02]"
+          className="cursor-pointer rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface-muted)] p-2.5 transition hover:border-[#0070E0]/50"
         >
           <div className="flex items-center justify-between gap-2">
             <span className="font-bold">{d.title}</span>
-            <span className="rounded bg-red-600/15 px-2 py-0.5 text-[11px] font-semibold text-red-700 dark:text-red-300">
-              Stripped -${d.strippedDarkPatternUsd.toFixed(2)} ({d.darkPatternCategory})
+            <span className="rounded-md bg-[var(--pl-danger-soft)] px-2 py-0.5 font-mono text-[11px] font-bold text-red-700 dark:text-red-300">
+              -${d.strippedDarkPatternUsd.toFixed(2)} ({d.darkPatternCategory})
             </span>
           </div>
-          <div className="mt-1 rounded bg-black/5 px-2 py-1 font-mono text-[11px] text-[var(--pl-muted)] dark:bg-black/40">
+          <div className="mt-1.5 truncate rounded-lg bg-[#0F141C] px-2.5 py-1 font-mono text-[11px] text-slate-300">
             {d.darkPatternQuote}
           </div>
           <div className="mt-1.5 flex items-center justify-between text-[11px] text-[var(--pl-muted)]">
-            <span>Tricky Store: {d.naiveStoreName} (${d.naiveCheckoutTotal.toFixed(2)})</span>
+            <span>Ad Store: {d.naiveStoreName} (${d.naiveCheckoutTotal.toFixed(2)})</span>
             <span className="font-semibold text-emerald-700 dark:text-emerald-400">
-              → Routed to {d.bestRetailer} (${d.channel3VerifiedPrice.toFixed(2)})
+              Rerouted to {d.bestRetailer} (${d.channel3VerifiedPrice.toFixed(2)})
             </span>
           </div>
         </div>
@@ -223,41 +225,41 @@ function PayPalHoldsChequeWidget(props: AgWidgetParams) {
     <div className="flex h-full flex-col gap-2 overflow-y-auto p-1.5 text-xs">
       {activeHolds.length === 0 ? (
         <div className="flex h-full items-center justify-center text-sm text-[var(--pl-muted)]">
-          All PayPal holds settled! Create a new PriceLock hold or reset demo state.
+          All PayPal holds settled. Create a new PriceLock hold on Checkout Shield.
         </div>
       ) : (
         activeHolds.map((d) => (
           <div
             key={d.id}
-            className="rounded-lg border-2 border-dashed border-amber-600/40 bg-amber-500/[0.06] p-3"
+            className="rounded-xl border border-[#0070E0]/30 bg-[var(--pl-paypal-soft)] p-3"
           >
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[11px] uppercase tracking-wider text-amber-800 dark:text-amber-300">
-                PAYPAL ORDERS V2 AUTHORIZE HOLD • {d.paypal.orderId}
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--pl-paypal)]">
+                PAYPAL ORDERS V2 HOLD • {d.paypal.orderId}
               </span>
-              <span className="rounded bg-emerald-600/20 px-2 py-0.5 font-bold text-emerald-800 dark:text-emerald-300">
+              <span className="rounded-md bg-[var(--pl-accent-soft)] px-2 py-0.5 font-mono font-bold text-emerald-800 dark:text-emerald-300">
                 Saves ${d.totalSavedUsd.toFixed(2)}
               </span>
             </div>
             <div className="mt-1 text-sm font-bold">{d.title}</div>
             <div className="mt-0.5 text-[11px] text-[var(--pl-muted)]">
-              Fulfilled by <strong>{d.bestRetailer}</strong> at verified floor{" "}
-              <strong>${d.channel3VerifiedPrice.toFixed(2)}</strong> (vs. ${d.naiveCheckoutTotal.toFixed(2)})
+              Fulfilled by <strong>{d.bestRetailer}</strong> at{" "}
+              <strong className="font-mono">${d.channel3VerifiedPrice.toFixed(2)}</strong> (vs. ${d.naiveCheckoutTotal.toFixed(2)})
             </div>
-            <div className="mt-2 flex items-center gap-2">
+            <div className="mt-2.5 flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => onDealDecisionRef?.(d.id, "CAPTURE")}
-                className="rounded-md bg-emerald-700 px-3 py-1 text-xs font-semibold text-white hover:bg-emerald-800"
+                className="cursor-pointer rounded-lg bg-[#0070E0] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#005EA6]"
               >
-                ✓ Capture Hold (${d.channel3VerifiedPrice.toFixed(2)})
+                Capture Hold (${d.channel3VerifiedPrice.toFixed(2)})
               </button>
               <button
                 type="button"
                 onClick={() => onDealDecisionRef?.(d.id, "VOID")}
-                className="rounded-md border border-[var(--pl-border)] px-3 py-1 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                className="cursor-pointer rounded-lg border border-[var(--pl-border)] bg-[var(--pl-surface)] px-3 py-1.5 text-xs font-semibold hover:border-[var(--pl-border-strong)]"
               >
-                ✕ Void Hold ($0.00)
+                Void ($0.00)
               </button>
             </div>
           </div>
@@ -297,8 +299,8 @@ export function priceLockCustomWidgets(defaults: AgWidgetsConfig): AgWidgetsConf
           }),
         defaultState: {
           format: {
-            title: { enabled: true, text: "Money Flow: Naive Store Checkout → PriceLock Surgeon → PayPal Hold" },
-            subtitle: { enabled: true, text: "Click any category pill to cross-filter the entire AG Studio report" },
+            title: { enabled: true, text: "Money Flow: Unprotected Checkout → PriceLock Surgeon → PayPal Hold" },
+            subtitle: { enabled: true, text: "Click any category chip to cross-filter the AG Studio report" },
           },
           dataMapping: {
             category: [{ id: "deals.category" }],
@@ -381,7 +383,7 @@ export function priceLockCustomWidgets(defaults: AgWidgetsConfig): AgWidgetsConf
         defaultState: {
           format: {
             title: { enabled: true, text: "Active PayPal Orders v2 Authorization Holds (1-Click Capture or Void)" },
-            subtitle: { enabled: true, text: "Money stays in your PayPal until you click Capture or Channel3 hits your target" },
+            subtitle: { enabled: true, text: "Money stays in your PayPal wallet until you approve Capture or target floor hits" },
           },
           dataMapping: {
             sku: [{ id: "deals.sku" }],

@@ -53,21 +53,19 @@ export default function ReceiptVerifier({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-4 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="pl-card-elevated rounded-2xl p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-extrabold ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[11px] font-bold uppercase ${
                 status.valid
-                  ? "bg-emerald-600/15 text-emerald-800 dark:text-emerald-300"
-                  : "bg-red-600/20 text-red-700 dark:text-red-300"
+                  ? "bg-[var(--pl-accent-soft)] text-emerald-800 dark:text-emerald-300"
+                  : "bg-[var(--pl-danger-soft)] text-red-700 dark:text-red-300"
               }`}
             >
-              {status.valid ? "✓ Ed25519 + SHA-256 Chain Verified" : "✕ TAMPER DETECTED — SIGNATURE REJECTED"}
+              {status.valid ? "Ed25519 + SHA-256 Chain Intact" : "TAMPER DETECTED — SIGNATURE REJECTED"}
             </span>
-            <p className="mt-1.5 text-sm font-medium">
-              <strong>WHAT HAPPENED:</strong> {status.reason}
-            </p>
+            <h2 className="mt-2 text-base font-extrabold">{status.reason}</h2>
             <p className="mt-1 font-mono text-[11px] text-[var(--pl-muted)]">
               Ed25519 Public Key (SPKI Raw Hex): <code>{publicKeyHex}</code>
             </p>
@@ -77,66 +75,55 @@ export default function ReceiptVerifier({
               id="btn-simulate-tamper"
               type="button"
               onClick={simulateTamper}
-              className="cursor-pointer rounded-xl bg-red-700 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-xs transition-all hover:-translate-y-0.5 hover:bg-red-800"
+              className="cursor-pointer rounded-xl bg-red-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-red-700"
             >
-              ⚡ Tamper Receipt #2 (+$50.00)
+              Simulate +$50 Receipt Tamper
             </button>
             <button
               id="btn-restore-ledger"
               type="button"
               onClick={restoreAuthentic}
-              className="cursor-pointer rounded-xl border border-[var(--pl-border)] px-3.5 py-1.5 text-xs font-bold transition-all hover:-translate-y-0.5 hover:bg-black/5 dark:hover:bg-white/5"
+              className="cursor-pointer rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface-muted)] px-3.5 py-2 text-xs font-bold transition hover:border-[var(--pl-border-strong)]"
             >
-              ↺ Restore Authentic Ledger
+              Restore Authentic Chain
             </button>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2.5">
+      <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
         {receipts.map((r, idx) => {
           const isTampered = status.firstTamperedIndex === idx;
           return (
             <div
               key={r.receiptId}
-              className={`rounded-xl border p-3.5 text-xs transition ${
+              className={`rounded-2xl border p-4 text-xs transition ${
                 isTampered
-                  ? "border-2 border-red-600 bg-red-600/[0.08]"
-                  : "border-[var(--pl-border)] bg-[var(--pl-surface)]"
+                  ? "border-2 border-red-600 bg-[var(--pl-danger-soft)]"
+                  : "pl-card"
               }`}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="rounded bg-black/10 px-2 py-0.5 font-mono font-bold dark:bg-white/10">
-                    #{r.sequence} • {r.receiptId}
+                  <span className="rounded bg-[var(--pl-surface-muted)] px-2 py-0.5 font-mono text-[11px] font-bold">
+                    #{r.sequence}
                   </span>
                   <span className="font-bold">{r.skuTitle}</span>
-                  <span className="rounded bg-emerald-600/15 px-2 py-0.5 font-semibold text-emerald-800 dark:text-emerald-300">
-                    {r.action}
-                  </span>
                 </div>
-                <div className="flex items-center gap-3 font-mono">
-                  <span>
-                    PayPal Amount: <strong>${r.amountUsd.toFixed(2)}</strong>
-                  </span>
-                  <span className="text-emerald-700 dark:text-emerald-400">
-                    Saved: <strong>${r.savedUsd.toFixed(2)}</strong>
-                  </span>
-                </div>
+                <span className="rounded-md bg-[var(--pl-accent-soft)] px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:text-emerald-300">
+                  {r.action} • ${r.amountUsd.toFixed(2)}
+                </span>
               </div>
-              <div className="mt-2 grid grid-cols-1 gap-1 font-mono text-[11px] text-[var(--pl-muted)] md:grid-cols-3">
+              <div className="mt-2 space-y-1 font-mono text-[10.5px] text-[var(--pl-muted)]">
                 <div className="truncate">
-                  PayPal Order: <code>{r.paypalOrderId}</code> ({r.paypalAuthOrCaptureId})
+                  Order: <code>{r.paypalOrderId}</code> ({r.paypalAuthOrCaptureId})
                 </div>
                 <div className="truncate">
-                  Prev SHA-256: <code>{r.prevHash.slice(0, 24)}...</code>
+                  SHA-256: <code>{r.payloadHash.slice(0, 36)}...</code>
                 </div>
                 <div className="truncate">
-                  Payload SHA-256: <code>{r.payloadHash.slice(0, 24)}...</code>
+                  Ed25519: <code>{r.signatureEd25519.slice(0, 44)}...</code>
                 </div>
-              </div>
-              <div className="mt-1 truncate font-mono text-[10px] text-[var(--pl-muted)]">
-                Ed25519 Signature: <code>{r.signatureEd25519}</code>
               </div>
             </div>
           );

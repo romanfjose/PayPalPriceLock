@@ -53,7 +53,7 @@ export async function GET() {
         hallucinationsPreventedCount: apimatic.naiveLlmHallucinationsCaught.length,
         valid: apimatic.valid,
       },
-      bryntum: {
+      holdScheduler: {
         timelineEnabled: true,
         activeHoldWindowsCount: 5,
       },
