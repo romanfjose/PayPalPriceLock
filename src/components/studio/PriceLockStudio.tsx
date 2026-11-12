@@ -75,10 +75,10 @@ export default function PriceLockStudio({
   return (
     <div className="flex flex-col gap-3">
       {/* Studio Agent Framework & Mode Toolbar */}
-      <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-3.5 shadow-sm">
+      <div className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-3.5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/15 px-3 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/15 px-3 py-1 text-xs font-extrabold text-emerald-800 dark:text-emerald-300">
               ● AG Studio 3.0 + Studio Agent Framework
             </span>
             <span className="text-xs text-[var(--pl-muted)]">
@@ -89,14 +89,14 @@ export default function PriceLockStudio({
             <button
               type="button"
               onClick={() => setMode((m) => (m === "view" ? "edit" : "view"))}
-              className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-800"
+              className="cursor-pointer rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-md"
             >
               {mode === "view" ? "✦ Customize in AG Studio Editor" : "✓ Lock Report (View Mode)"}
             </button>
             <button
               type="button"
               onClick={resetReportLayout}
-              className="rounded-lg border border-[var(--pl-border)] px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+              className="cursor-pointer rounded-xl border border-[var(--pl-border)] px-3 py-1.5 text-xs font-semibold transition-all hover:-translate-y-0.5 hover:bg-black/5 dark:hover:bg-white/5"
             >
               ↺ Restore Default Layout
             </button>
@@ -107,12 +107,13 @@ export default function PriceLockStudio({
         <div className="mt-3 flex flex-col gap-2 border-t border-[var(--pl-border)] pt-3">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-xs font-semibold text-[var(--pl-muted)]">Studio Agent Starters:</span>
-            {AI_STARTERS.map((starter) => (
+            {AI_STARTERS.map((starter, idx) => (
               <button
                 key={starter}
+                id={`studio-prompt-${idx}`}
                 type="button"
                 onClick={() => runStudioAgentPrompt(starter)}
-                className="rounded-full border border-[var(--pl-border)] bg-black/[0.02] px-2.5 py-1 text-xs font-medium transition hover:border-emerald-600/50 dark:bg-white/[0.03]"
+                className="cursor-pointer rounded-full border border-[var(--pl-border)] bg-black/[0.02] px-2.5 py-1 text-xs font-semibold transition-all hover:-translate-y-0.5 hover:border-emerald-600/50 dark:bg-white/[0.03]"
               >
                 {starter}
               </button>

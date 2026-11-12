@@ -53,11 +53,11 @@ export default function ReceiptVerifier({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-4 shadow-sm">
+      <div className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-4 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-bold ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-extrabold ${
                 status.valid
                   ? "bg-emerald-600/15 text-emerald-800 dark:text-emerald-300"
                   : "bg-red-600/20 text-red-700 dark:text-red-300"
@@ -74,16 +74,18 @@ export default function ReceiptVerifier({
           </div>
           <div className="flex items-center gap-2">
             <button
+              id="btn-simulate-tamper"
               type="button"
               onClick={simulateTamper}
-              className="rounded-lg bg-red-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-800"
+              className="cursor-pointer rounded-xl bg-red-700 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-xs transition-all hover:-translate-y-0.5 hover:bg-red-800"
             >
               ⚡ Tamper Receipt #2 (+$50.00)
             </button>
             <button
+              id="btn-restore-ledger"
               type="button"
               onClick={restoreAuthentic}
-              className="rounded-lg border border-[var(--pl-border)] px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+              className="cursor-pointer rounded-xl border border-[var(--pl-border)] px-3.5 py-1.5 text-xs font-bold transition-all hover:-translate-y-0.5 hover:bg-black/5 dark:hover:bg-white/5"
             >
               ↺ Restore Authentic Ledger
             </button>

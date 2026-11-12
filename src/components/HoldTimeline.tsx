@@ -28,7 +28,7 @@ export default function HoldTimeline({
   return (
     <div className="flex flex-col gap-4">
       {/* 2-Second Plain-English Summary Strip */}
-      <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-4 shadow-sm">
+      <div className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-4 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-0.5 text-xs font-bold text-amber-800 dark:text-amber-300">
@@ -50,7 +50,7 @@ export default function HoldTimeline({
       </div>
 
       {/* Interactive Gantt / Scheduler Grid */}
-      <div className="overflow-hidden rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] shadow-sm">
+      <div className="pl-glass-panel overflow-hidden rounded-2xl border border-[var(--pl-border)] shadow-sm">
         <div className="grid grid-cols-12 border-b border-[var(--pl-border)] bg-black/[0.03] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--pl-muted)] dark:bg-white/[0.03]">
           <div className="col-span-4">PayPal Resource & SKU</div>
           <div className="col-span-6">
@@ -155,10 +155,11 @@ export default function HoldTimeline({
                     📉 -$15 Drop
                   </button>
                   <button
+                    id={`btn-shift-hold-${d.id}`}
                     type="button"
                     onClick={() => extendHoldWindow(d.id)}
                     title="Extend PayPal Hold Window by +3 days"
-                    className="rounded border border-[var(--pl-border)] px-2 py-1 text-[11px] font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                    className="cursor-pointer rounded-lg border border-[var(--pl-border)] px-2.5 py-1 text-[11px] font-bold transition-all hover:-translate-y-0.5 hover:bg-black/5 dark:hover:bg-white/5"
                   >
                     +3d
                   </button>

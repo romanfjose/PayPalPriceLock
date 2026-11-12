@@ -48,10 +48,10 @@ export default function RaceView({
   return (
     <div className="flex flex-col gap-4">
       {/* 2-Second Plain-English Summary Strip */}
-      <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-4 shadow-sm">
+      <div className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-4 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/15 px-3 py-0.5 text-xs font-bold text-emerald-800 dark:text-emerald-300">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/15 px-3 py-0.5 text-xs font-extrabold text-emerald-800 dark:text-emerald-300">
               ⚔️ Side-by-Side Live Execution Race (Unprotected Agent vs. PriceLock)
             </span>
             <p className="mt-1.5 text-sm font-medium">
@@ -65,6 +65,15 @@ export default function RaceView({
               <strong>${race.priceLockAgent.netSavingsUsd.toFixed(2)}</strong>).
             </p>
           </div>
+          <button
+            id="btn-run-race"
+            type="button"
+            disabled={running}
+            onClick={() => executeRace(query)}
+            className="cursor-pointer rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-50"
+          >
+            {running ? "Racing..." : "⚡ Re-Run Side-by-Side Race"}
+          </button>
         </div>
 
         {/* Preset Race Selector */}
@@ -76,9 +85,9 @@ export default function RaceView({
               type="button"
               disabled={running}
               onClick={() => executeRace(preset)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+              className={`cursor-pointer rounded-full px-3 py-1 text-xs font-semibold transition-all hover:-translate-y-0.5 ${
                 query === preset
-                  ? "bg-emerald-700 text-white"
+                  ? "bg-emerald-700 text-white shadow-xs"
                   : "border border-[var(--pl-border)] bg-black/[0.02] hover:border-emerald-600/50 dark:bg-white/[0.03]"
               }`}
             >
@@ -91,7 +100,7 @@ export default function RaceView({
       {/* Left vs Right Race Arena */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* LEFT PANE: NAIVE AGENT */}
-        <div className="rounded-xl border-2 border-red-600/40 bg-[var(--pl-surface)] p-4 shadow-sm">
+        <div className="pl-glass-panel pl-tilt-card rounded-2xl border-2 border-red-600/40 p-4 shadow-sm">
           <div className="flex items-center justify-between border-b border-[var(--pl-border)] pb-3">
             <div>
               <span className="rounded bg-red-600/15 px-2 py-0.5 text-xs font-bold text-red-700 dark:text-red-300">
@@ -136,7 +145,8 @@ export default function RaceView({
         </div>
 
         {/* RIGHT PANE: PRICELOCK PROTECTED ENGINE */}
-        <div className="rounded-xl border-2 border-emerald-600/50 bg-[var(--pl-surface)] p-4 shadow-sm">
+        <div className="pl-glass-panel pl-tilt-card relative overflow-hidden rounded-2xl border-2 border-emerald-600/50 p-4 shadow-sm">
+          <div className="pl-laser-line" />
           <div className="flex items-center justify-between border-b border-[var(--pl-border)] pb-3">
             <div>
               <span className="rounded bg-emerald-600/15 px-2 py-0.5 text-xs font-bold text-emerald-800 dark:text-emerald-300">
@@ -190,7 +200,7 @@ export default function RaceView({
       </div>
 
       {/* APIMatic Context Plugin Compiler Diff */}
-      <div className="rounded-xl border border-[var(--pl-border)] bg-[var(--pl-surface)] p-4 shadow-sm">
+      <div id="btn-toggle-apimatic" className="pl-glass-panel pl-tilt-card rounded-2xl border border-[var(--pl-border)] p-4 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <span className="rounded-full bg-purple-600/15 px-3 py-0.5 text-xs font-bold text-purple-800 dark:text-purple-300">
